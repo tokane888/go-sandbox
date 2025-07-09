@@ -1,0 +1,25 @@
+pre-commit:
+  commands:
+    dprint-fmt:
+      run: |
+        files=$(echo "{staged_files}" | grep -E '(Dockerfile$|\.json$|\.md$|\.ya?ml$)' || true)
+        if [ -n "$files" ]; then
+          echo "$files" # フォーマット対象のファイル名出力(go fmt等では出力されるが、dprintでは出力されないため)
+          echo "$files" | xargs -r dprint fmt
+        fi
+      stage_fixed: true
+
+pre-push:
+  commands:
+    golangci-lint:
+      # プロジェクト全体に対してlintを実行
+      run: |
+        # すべてのGoファイルに対してlintを実行
+        golangci-lint run ./... --fix
+
+        # 修正があった場合は警告を表示
+        if [ -n "$(git diff)" ]; then
+          echo "警告: golangci-lintによって一部の問題が自動修正されました。"
+          echo "変更をコミットして再度pushしてください。"
+          exit 1
+        fi
