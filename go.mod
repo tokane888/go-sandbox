@@ -1,5 +1,4 @@
-// TODO: モジュール名調整
-module github.com/tokane888/go-repository-template
+module github.com/tokane888/go-sandbox
 
 go 1.23.8
 
