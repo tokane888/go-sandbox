@@ -1,37 +1,61 @@
 package main
 
 import (
+	"context"
 	"errors"
-	"log"
-
-	"github.com/tokane888/go-sandbox/configs"
-	common "github.com/tokane888/go_common_module/v2"
-	"go.uber.org/zap"
+	"fmt"
+	"sync"
+	"time"
 )
 
-// アプリのversion。デフォルトは開発版。cloud上ではbuild時に-ldflagsフラグ経由でバージョンを埋め込む
-var version = "dev"
+var wg sync.WaitGroup
+
+func generator(ctx context.Context, num int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer wg.Done()
+		defer close(out)
+		ticker := time.NewTicker(time.Second)
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Println("generator() done")
+				fmt.Println(context.Cause(ctx))
+				if err := ctx.Err(); errors.Is(err, context.Canceled) {
+					fmt.Println("canceled")
+				} else if errors.Is(err, context.DeadlineExceeded) {
+					fmt.Println("deadline exceeded")
+				}
+				return
+			case <-ticker.C:
+				select {
+				case <-ctx.Done():
+					fmt.Println("generator() done")
+					return
+				case out <- num:
+				}
+			}
+		}
+	}()
+
+	return out
+}
 
 func main() {
-	cfg, err := configs.LoadConfig(version)
-	if err != nil {
-		log.Println("failed to load config:", err)
-		return
+	ctx, cancel := context.WithTimeoutCause(context.Background(), 1500*time.Millisecond, errors.New("timeout"))
+	wg.Add(1)
+	out := generator(ctx, 1)
+LOOP:
+	for range 3 {
+		result, ok := <-out
+		if ok {
+			fmt.Println(result)
+		} else {
+			fmt.Println("timeout in main()")
+			break LOOP
+		}
 	}
-	logger, err := common.NewLogger(cfg.Logger)
-	if err != nil {
-		// zap loggerの初期化に失敗した場合のエラーハンドリング
-		// zapを使用できないため、標準のlogパッケージを使用
-		log.Println("failed to initialize logger:", err)
-		return
-	}
-	//nolint: errcheck
-	defer logger.Sync()
 
-	logger.Info("sample info")
-	logger.Info("additional field sample", zap.String("key", "value"))
-	logger.Warn("sample warn")
-	logger.Error("sample error")
-	err = errors.New("errorのサンプル")
-	logger.Error("DB Connection failed", zap.Error(err))
+	cancel()
+	wg.Wait()
 }
