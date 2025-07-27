@@ -12,6 +12,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
 RUN npm install -g dprint
 RUN npm install -g lefthook
 
+# install apt packages
+RUN apt-get install -y default-jre
+RUN apt-get install -y fonts-ipafont
+RUN apt-get install -y graphviz
+
 # install other packages
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.1.6
 # /go/pkg/mod/cache/download/ 配下のownerがrootになることを防ぐためvscode user使用

@@ -29,6 +29,7 @@
         "foxundermoon.shell-format",
         "github.vscode-github-actions",
         "golang.go@prerelease",
+        "jebbs.plantuml",
         "ms-azuretools.vscode-docker",
         "streetsidesoftware.code-spell-checker",
         "timonwong.shellcheck",
