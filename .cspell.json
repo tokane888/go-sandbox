@@ -26,6 +26,8 @@
     "multierr",
     "nolint",
     "shellcheck",
+    "stretchr",
+    "testcontainers",
     "timonwong",
     "usecase",
     "yzhang"
