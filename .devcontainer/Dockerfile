@@ -16,6 +16,7 @@ RUN npm install -g lefthook
 RUN apt-get install -y default-jre
 RUN apt-get install -y fonts-ipafont
 RUN apt-get install -y graphviz
+RUN npm install -g @goreleaser/goreleaser
 
 # install other packages
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.1.6

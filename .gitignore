@@ -1,3 +1,5 @@
 tmp
 .tag
 .claude/settings.local.json
+# Added by goreleaser init:
+dist/
