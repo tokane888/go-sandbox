@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use: "hello-cli",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello, World")
+		fmt.Println("Hello, World!")
 	},
 }
 
