@@ -1,7 +1,7 @@
 // TODO: モジュール名調整
 module github.com/tokane888/go-repository-template/services/api
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/gin-gonic/gin v1.10.1
@@ -10,7 +10,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/tokane888/go-repository-template/pkg/logger v0.0.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.40.0
+	golang.org/x/crypto v0.42.0
 )
 
 require (
@@ -34,9 +34,9 @@ require (
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.19.0 // indirect
-	golang.org/x/net v0.42.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/text v0.27.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
